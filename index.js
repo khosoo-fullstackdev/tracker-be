@@ -1,6 +1,6 @@
-const { Pool } = require("pg");
 const express = require("express");
 require("dotenv").config();
+const router = express.Router();
 
 const app = express();
 
@@ -11,40 +11,17 @@ const cors = require("cors");
 app.use(cors());
 
 const fs = require("fs");
-const { error } = require("console");
+const { error, table } = require("console");
 
-const { v4: uuidv4 } = require("uuid");
+const { createTable } = require("./route/table/create-table");
+const { updateTable } = require("./route/table/update-table");
+const { dropTable } = require("./route/table/drop-table");
 
-let { PGHOST, PGDATABASE, PGUSER, PGPASSWORD, PGPORT } = process.env;
-const pool = new Pool({
-  host: PGHOST,
-  database: PGDATABASE,
-  username: PGUSER,
-  password: PGPASSWORD,
-  port: PGPORT,
-  ssl: {
-    require: true,
-  },
-});
+app.use(router);
 
-app.post("/signup", async (req, res) => {
-  const newUser = req.body;
-
-  console.log(newUser);
-
-  const client = await pool.connect();
-  const Query = `INSERT INTO users (name, email, password, id) VALUES ('${newUser.name}','${newUser.email}','${newUser.password}','${newUser.id}');`;
-  try {
-    client.query(Query);
-  } catch (e) {
-    console.log(e);
-  } finally {
-    client.release();
-    console.log("user add successfully");
-  }
-
-  res.status(200).send({ message: "User Added successfully" });
-});
+router.post("/create-table", createTable);
+router.post("/update-table", updateTable);
+router.post("/drop-table", dropTable);
 
 app.post("/login", async (req, res) => {
   const user = req.body;
@@ -67,47 +44,57 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.post("/createTable", async (req, res) => {
-  const client = await pool.connect();
-  // "CREATE TABLE transaction (id UUID PRIMARY KEY DEFAULT uuid_generate_v4(), user_id UUID, FOREIGN KEY(user_id) REFERENCES users(id), description TEXT, amount REAL NOT NULL, transaction ENUM(“INC”, ”EXP”), createdAt TIMESTAMP DEFAULT: NOW() , updatedAt TIMESTAMP DEFAULT: NOW(), category_id UUID FOREIGN KEY(category_id) REFERENCES category(id)";
-  // "CREATE TABLE users ( id UUID PRIMARY KEY DEFAULT uuid_generate_v4(), email VARCHAR(50) UNIQUE NOT NULL, name VARCHAR(50) NOT NULL , password TEXT, avatar_img TEXT, createdAt TIMESTAMP, updatedAt TIMESTAMP, currencyType TEXT DEFAULT'MNT');";
-  // "CREATE TABLE category ( id UUID PRIMARY KEY DEFAULT uuid_generate_v4(), name VARCHAR(100) NOT NULL , description TEXT, createdAt TIMESTAMP, updatedAt TIMESTAMP, category_image TEXT";
-  const Query =
-    "CREATE TABLE transaction (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), user_id UUID ,FOREIGN KEY (user_id) REFERENCES users(id), description TEXT, amount REAL NOT NULL, transaction_type VARCHAR(50), createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, updatedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, category_id UUID ,FOREIGN KEY(category_id) REFERENCES category(id))";
-  try {
-    client.query(Query);
-  } catch (error) {
-    console.log(error);
-  } finally {
-    client.release();
-    res.status(200).send({ message: "table created" });
-  }
-});
+app.post("/signup", async (req, res) => {
+  const newUser = req.body;
 
-app.post("/updateTable", async (req, res) => {
+  console.log(newUser);
+
   const client = await pool.connect();
-  const Query = "CREATE TABLE transaction id VARCHAR(36), )";
+  const Query = `INSERT INTO users (name, email, password, id) VALUES ('${newUser.name}','${newUser.email}','${newUser.password}','${newUser.id}');`;
   try {
     client.query(Query);
   } catch (e) {
     console.log(e);
   } finally {
     client.release();
-    res.status(200).send({ message: "table updated" });
+    console.log("user add successfully");
   }
+
+  res.status(200).send({ message: "User Added successfully" });
 });
 
-app.post("/dropTable", async (req, res) => {
+app.post("/currency", async (req, res) => {
+  const balance = req.body;
+
   const client = await pool.connect();
-  const Query = "DROP TABLE category";
+  const Query = `INSERT INTO users () VALUES ());`;
   try {
     client.query(Query);
   } catch (e) {
     console.log(e);
   } finally {
     client.release();
-    res.status(200).send({ message: "table deleted" });
+    console.log("user add successfully");
   }
+
+  res.status(200).send({ message: "User Added successfully" });
+});
+
+app.post("/balance", async (req, res) => {
+  const balance = req.body;
+
+  const client = await pool.connect();
+  const Query = `INSERT INTO users () VALUES ());`;
+  try {
+    client.query(Query);
+  } catch (e) {
+    console.log(e);
+  } finally {
+    client.release();
+    console.log("user add successfully");
+  }
+
+  res.status(200).send({ message: "User Added successfully" });
 });
 
 // app.post("/deleteUser", async (req, res) => {
