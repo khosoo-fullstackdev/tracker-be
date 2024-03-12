@@ -13,8 +13,7 @@ app.use(cors());
 const fs = require("fs");
 const { error } = require("console");
 
-// const { v4: uuidv4 } = require("uuid");
-const {gen_random_uuid} = require("uuid")
+const { v4: uuidv4 } = require("uuid");
 
 let { PGHOST, PGDATABASE, PGUSER, PGPASSWORD, PGPORT } = process.env;
 const pool = new Pool({
@@ -73,7 +72,8 @@ app.post("/createTable", async (req, res) => {
   // "CREATE TABLE transaction (id UUID PRIMARY KEY DEFAULT uuid_generate_v4(), user_id UUID, FOREIGN KEY(user_id) REFERENCES users(id), description TEXT, amount REAL NOT NULL, transaction ENUM(“INC”, ”EXP”), createdAt TIMESTAMP DEFAULT: NOW() , updatedAt TIMESTAMP DEFAULT: NOW(), category_id UUID FOREIGN KEY(category_id) REFERENCES category(id)";
   // "CREATE TABLE users ( id UUID PRIMARY KEY DEFAULT uuid_generate_v4(), email VARCHAR(50) UNIQUE NOT NULL, name VARCHAR(50) NOT NULL , password TEXT, avatar_img TEXT, createdAt TIMESTAMP, updatedAt TIMESTAMP, currencyType TEXT DEFAULT'MNT');";
   // "CREATE TABLE category ( id UUID PRIMARY KEY DEFAULT uuid_generate_v4(), name VARCHAR(100) NOT NULL , description TEXT, createdAt TIMESTAMP, updatedAt TIMESTAMP, category_image TEXT";
-  const Query = `CREATE TABLE users ( id UUID PRIMARY KEY DEFAULT gen_random_uuid(), email VARCHAR(50) UNIQUE NOT NULL, name VARCHAR(50) NOT NULL , password TEXT, avatar_img TEXT, createdAt TIMESTAMP, updatedAt TIMESTAMP, currencyType TEXT DEFAULT 'MNT');`;
+  const Query =
+    "CREATE TABLE transaction (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), user_id UUID ,FOREIGN KEY (user_id) REFERENCES users(id), description TEXT, amount REAL NOT NULL, transaction_type VARCHAR(50), createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, updatedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, category_id UUID ,FOREIGN KEY(category_id) REFERENCES category(id))";
   try {
     client.query(Query);
   } catch (error) {
