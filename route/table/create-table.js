@@ -1,9 +1,9 @@
 const { Pool } = require("pg");
 const express = require("express");
-require("dotenv").config();
 const app = express();
 const { v4: uuidv4 } = require("uuid");
 
+require("dotenv").config();
 let { PGHOST, PGDATABASE, PGUSER, PGPASSWORD, PGPORT } = process.env;
 const pool = new Pool({
   host: PGHOST,
