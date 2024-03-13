@@ -9,13 +9,13 @@ app.use(bodyParser.json());
 const cors = require("cors");
 app.use(cors());
 
-const { createTable } = require("./route/table/create-table");
-const { updateTable } = require("./route/table/update-table");
-const { dropTable } = require("./route/table/drop-table");
-const { signin } = require("./route/users/signin");
-const { signup } = require("./route/users/signup");
-const { balance } = require("./route/users/balance");
-const { currency } = require("./route/users/currency-select");
+const { createTable } = require("./routes/table/create-table");
+const { updateTable } = require("./routes/table/update-table");
+const { dropTable } = require("./routes/table/drop-table");
+const { signin } = require("./routes/users/signin");
+const { signup } = require("./routes/users/signup");
+const { balance } = require("./routes/users/balance");
+const { currency } = require("./routes/users/currency-select");
 
 router.post("/create-table", createTable);
 router.post("/update-table", updateTable);
