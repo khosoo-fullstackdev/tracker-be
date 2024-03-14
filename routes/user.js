@@ -8,15 +8,20 @@ userRouter.post("/signup", async (req, res) => {
 });
 
 userRouter.post("/signin", async (req, res) => {
-  const newUserData = req.body;
-  const result = await getUser(newUserData);
+  const userData = req.body;
+  const result = await getUser(userData);
   res.json(result);
+  console.log("aaaaa", result);
 });
 
-userRouter.post("/currency-select", async (req, res) => {
+userRouter.post("/currency-set", async (req, res) => {
   const newUserData = req.body;
   const result = await currencySelect(newUserData);
-  res.json(result);
+  if (result["rowCount"]) {
+    return res.status(200).send({ message: "success" });
+  } else {
+    return res.status(500).send({ message: "failed" });
+  }
 });
 
 module.exports = {
