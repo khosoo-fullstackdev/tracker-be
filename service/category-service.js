@@ -14,7 +14,7 @@ const pool = new Pool({
   keepAlive: true,
 });
 
-async function createTable() {
+async function cateAdd() {
   let response;
   const client = await pool.connect();
   const Query =
@@ -32,52 +32,4 @@ async function createTable() {
   // "CREATE TABLE category ( id UUID PRIMARY KEY DEFAULT uuid_generate_v4(), name VARCHAR(100) NOT NULL , description TEXT, createdAt TIMESTAMP, updatedAt TIMESTAMP, category_image TEXT";
 }
 
-async function dropTable() {
-  let response;
-  const client = await pool.connect();
-  const Query = "DROP TABLE users";
-  try {
-    response = await client.query(Query);
-  } catch (error) {
-    console.log(error);
-  } finally {
-    client.release();
-    return { message: "table deleted" };
-  }
-}
-
-async function updateTable() {
-  let response;
-  const client = await pool.connect();
-  const Query = "ALTER TABLE users ADD balance VARCHAR(255) DEFAULT 0;";
-  try {
-    response = await client.query(Query);
-  } catch (error) {
-    console.log(error);
-  } finally {
-    client.release();
-  }
-  return { message: "Table update complete" };
-}
-
-async function dropUsers(userName) {
-  let response;
-  const client = await pool.connect();
-  const Query = `DELETE FROM users WHERE name='${userName.name}';`;
-
-  try {
-    response = await client.query(Query);
-  } catch (error) {
-    console.log(error);
-  } finally {
-    client.release();
-  }
-  return { message: "user delete complete" };
-}
-
-module.exports = {
-  createTable,
-  updateTable,
-  dropTable,
-  dropUsers,
-};
+module.exports = { cateAdd };

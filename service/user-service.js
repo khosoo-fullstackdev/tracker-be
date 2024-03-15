@@ -53,10 +53,11 @@ async function getUser(userInfo) {
 }
 
 async function currencySelect(userInfo) {
+  let response;
   const client = await pool.connect();
-  const Query = `UPDATE users SET currency_type='${userInfo.currency}' WHERE (id='${userInfo.id}');`;
+  const Query = `UPDATE users SET currencytype='${userInfo.currency}' WHERE id='${userInfo.userid}';`;
   try {
-    const response = await client.query(Query);
+    response = await client.query(Query);
   } catch (error) {
     console.log(error);
   } finally {
@@ -66,16 +67,18 @@ async function currencySelect(userInfo) {
 }
 
 async function balanceSet(userInfo) {
+  let response;
   const client = await pool.connect();
-  const Query = `INSERT INTO users () VALUES ());`;
+  const Query = `UPDATE users SET balance='${userInfo.balance}' WHERE id='${userInfo.userid}';`;
   try {
-    client.query(Query);
-  } catch (e) {
-    console.log(e);
+    response = await client.query(Query);
+  } catch (error) {
+    console.log(error);
   } finally {
     client.release();
-    console.log("user add successfully");
   }
+  console.log("balance added succesfully");
+  return response;
 }
 module.exports = {
   addUser,

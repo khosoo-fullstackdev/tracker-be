@@ -1,5 +1,10 @@
 const userRouter = require("express").Router();
-const { addUser, getUser, currencySelect } = require("../service/user-service");
+const {
+  addUser,
+  getUser,
+  currencySelect,
+  balanceSet,
+} = require("../service/user-service");
 
 userRouter.post("/signup", async (req, res) => {
   const newUserData = req.body;
@@ -17,6 +22,15 @@ userRouter.post("/signin", async (req, res) => {
 userRouter.post("/currency-set", async (req, res) => {
   const newUserData = req.body;
   const result = await currencySelect(newUserData);
+  if (result["rowCount"]) {
+    return res.status(200).send({ message: "success" });
+  } else {
+    return res.status(500).send({ message: "failed" });
+  }
+});
+userRouter.post("/balance-set", async (req, res) => {
+  const newUserData = req.body;
+  const result = await balanceSet(newUserData);
   if (result["rowCount"]) {
     return res.status(200).send({ message: "success" });
   } else {
